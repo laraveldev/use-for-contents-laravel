@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,8 +57,9 @@
 
     <div class="mb-3">
         <h5 class="mb-2">Genres</h5>
-        <span class="badge bg-success">Fantasy</span>
-        <span class="badge bg-success">Drama</span>
+        @foreach($content->generes as $genere)
+            <span class="badge bg-success">{{$genere->name}}</span>
+        @endforeach
     </div>
 </div>
 

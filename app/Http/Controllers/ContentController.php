@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Content;
+use App\Models\Genere;
+use Illuminate\Contracts\View\View;
 
 use Illuminate\Http\Request;
 
@@ -15,7 +17,7 @@ class ContentController extends Controller
     {
         $contents = Content::all();
 
-        return view('content', ['contents' => $contents]);
+        return view('contents.index', compact('contents'));
     }
 
     /**
@@ -23,7 +25,10 @@ class ContentController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all('id', 'name')->pluck('name', 'id');
+        $genres     = Genere::all('id', 'name')->pluck('name', 'id');
+
+        return view('admin.index', compact('categories', 'genres'));
     }
 
     /**
@@ -31,14 +36,17 @@ class ContentController extends Controller
      */
     public function store(Request $request)
     {
+        
         $content = Content::query()->create([
-            'title'       => ucfirst(fake()->words(rand(3,7), true)),
-            'description' => fake()->realText('100'),
-            'url'         => fake()->url,
-            'category_id' => Category::query()->inRandomOrder()->value('id'),
+            'title'       => $request->get('title'),
+            'description' => $request->get('description'),
+            'url'         => $request->get('url'),
+            'category_id' => $request->get('category_id'),
         ]);
 
-        return $content;
+        $content->generes()->attach($request->get('genere_id'));
+
+        return redirect('/contents')->with('success', 'Content created successfully.');
     }
 
     /**
@@ -47,8 +55,8 @@ class ContentController extends Controller
     public function show(Content $content)
     {
         
-        $content->load('authors');
-         return view('contents-show', ['content' => $content]);
+        $content->load('authors','generes');
+        return view('contents.show', compact('content'));
         
     }
 
@@ -74,5 +82,12 @@ class ContentController extends Controller
     public function destroy(Content $content)
     {
         //
+    }
+    public function adminIndex()
+    {
+        $categories = Category::all('id', 'name')->pluck('name', 'id');
+        $genres     = Genere::all('id', 'name')->pluck('name', 'id');
+
+        return view('admin.index', compact('categories', 'genres'));
     }
 }

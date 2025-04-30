@@ -14,11 +14,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                
+                
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/categories">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/contents">Contents</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/authors">Authors</a>
@@ -30,4 +29,27 @@
         </div>
     </div>
 </nav>
-Categories
+
+
+<div class="container">
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    <div class="row">
+        @foreach($authors as $author)
+            <div class="col-4 mb-3 p-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{$author->name}}</h5>
+                        
+                        <a href="/authors/{{$author->id}}" class="btn btn-primary">Open</a>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+</div>
+

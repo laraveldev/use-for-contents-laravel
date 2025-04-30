@@ -14,6 +14,7 @@ class Content extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+    
     public function authors()
     {
         return $this->belongsToMany(
@@ -22,5 +23,9 @@ class Content extends Model
             'content_id', // foreign key on the pivot table for this model
             'author_id', // foreign key on the pivot table for the related model
         );
+    }
+    public function generes()
+    {
+        return $this->belongsToMany(Genere::class);
     }
 }
